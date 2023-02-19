@@ -37,6 +37,66 @@ MainView {
         id: rootLayout
         anchors.fill: parent
         primaryPage: mainPage
+
+        property bool dialogIsOpen: false
+
+        Component.onCompleted: {
+            FeatureManager.commandRunner = CommandRunner;
+            dialogIsOpen = true;
+            PopupUtils.open(dialog);
+        }
+
+        // First start password entry
+        Component {
+            id: dialog
+
+            Dialog {
+                id: dialogue
+                title: qsTr("Authentication required")
+                text: qsTr("Please enter your user PIN or password to continue:")
+
+                Timer {
+                    id: enterDelayTimer
+                    interval: 1000
+                    running: false
+                    onTriggered: entry.text = ""
+                }
+
+                TextField {
+                    id: entry
+                    placeholderText: qsTr("PIN or password")
+                    echoMode: TextInput.Password
+                    focus: true
+                    enabled: !enterDelayTimer.running
+                }
+                Button {
+                    text: qsTr("Ok")
+                    color: theme.palette.normal.positive
+
+                    enabled: !enterDelayTimer.running
+                    onClicked: {
+                        CommandRunner.providePassword(entry.text)
+                        if (CommandRunner.validatePassword()) {
+                            PopupUtils.close(dialogue)
+                            dialogIsOpen = false
+                        } else {
+                            enterDelayTimer.start()
+                        }
+                    }
+                }
+
+                Button {
+                    text: qsTr("Cancel")
+                    enabled: !enterDelayTimer.running
+                    onClicked: {
+                        PopupUtils.close(dialogue)
+                        dialogIsOpen = false
+                        Qt.quit()
+                    }
+                }
+            }
+        }
+
         Page {
             id: mainPage
             header: PageHeader {
@@ -55,6 +115,11 @@ MainView {
             }
 
             Column {
+                anchors.top: header.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+
                 Row {
                     CheckBox {
                         enabled: false
@@ -68,9 +133,9 @@ MainView {
                         text: "Enable x86_64 and PE executable support"
                         onCheckedChanged: {
                             if (checked)
-                                FeatureManager.enable()
+                                checked = FeatureManager.enable() ? true : false
                             else
-                                FeatureManager.disable()
+                                checked = FeatureManager.disable() ? false : true
                         }
                     }
                 }

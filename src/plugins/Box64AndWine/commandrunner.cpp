@@ -71,38 +71,6 @@ bool CommandRunner::ln(const QString& source, const QString& newTarget)
     return (this->m_process->exitCode() == 0);
 }
 
-QString CommandRunner::getConfigFsMountPoint()
-{
-    const QStringList writeCommand {
-        QStringLiteral("/bin/sh"), QStringLiteral("-c"),
-        QStringLiteral("/bin/mount | /bin/grep configfs")
-    };
-
-    sudo(writeCommand);
-    this->m_process->waitForFinished();
-
-    const QString value = QString(this->m_process->readAllStandardOutput()).trimmed();
-    QStringList values = value.split(' ', QString::SkipEmptyParts);
-
-    if (values.size() < 5)
-        return QStringLiteral("");
-    return values[2];
-}
-
-QString CommandRunner::getUDCController()
-{
-    const QStringList writeCommand {
-        QStringLiteral("/bin/sh"), QStringLiteral("-c"),
-        QStringLiteral("/usr/bin/getprop sys.usb.controller")
-    };
-
-    sudo(writeCommand);
-    this->m_process->waitForFinished();
-
-    const QString value = QString(this->m_process->readAllStandardOutput()).trimmed();
-    return value;
-}
-
 void CommandRunner::providePassword(const QString& password)
 {
     this->m_process->write(password.toUtf8());

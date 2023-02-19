@@ -27,16 +27,40 @@
 
 #include "featuremanager.h"
 
-FeatureManager::FeatureManager() {
+static const QString box64conf = QStringLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current/box64.conf");
+static const QString wine64conf = QStringLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current/wine64.conf");
+
+FeatureManager::FeatureManager()
+{
 
 }
 
 bool FeatureManager::enable()
 {
+    if (m_enabled)
+        return false;
+
+    m_commandRunner->sudo(QStringList{"mount", "-o", "remount,rw", "/"});
+
+    const QByteArray box64contents = m_commandRunner->readFile(box64conf);
+    m_commandRunner->writeFile("/etc/binfmt.d/box64.conf", box64contents);
+
+    const QByteArray wine64contents = m_commandRunner->readFile(wine64conf);
+    m_commandRunner->writeFile("/etc/binfmt.d/wine64.conf", wine64contents);
+
+    m_commandRunner->sudo(QStringList{"mount", "-o", "remount,ro", "/"});
+
+    m_enabled = true;
+    emit enabledChanged();
     return true;
 }
 
 bool FeatureManager::disable()
 {
+    if (!m_enabled)
+        return false;
+
+    m_enabled = false;
+    emit enabledChanged();
     return true;
 }

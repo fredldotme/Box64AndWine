@@ -22,11 +22,14 @@
 #include <QVariantList>
 #include <QVariantMap>
 
+#include "commandrunner.h"
+
 class FeatureManager: public QObject {
     Q_OBJECT
 
     Q_PROPERTY(bool supported MEMBER m_supported NOTIFY supportedChanged)
     Q_PROPERTY(bool enabled MEMBER m_enabled NOTIFY enabledChanged)
+    Q_PROPERTY(CommandRunner* commandRunner MEMBER m_commandRunner NOTIFY commandRunnerChanged)
 
 public:
     FeatureManager();
@@ -39,9 +42,12 @@ private:
     bool m_supported;
     bool m_enabled;
 
+    CommandRunner* m_commandRunner;
+
 signals:
     void supportedChanged();
     void enabledChanged();
+    void commandRunnerChanged();
 };
 
 #endif
