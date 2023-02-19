@@ -1,0 +1,15 @@
+{
+    "name": "box64andwine.fredldotme",
+    "description": "Support for box64 & WINE on Ubuntu Touch",
+    "architecture": "@CLICK_ARCH@",
+    "title": "Box64 & Wine",
+    "hooks": {
+        "box64andwine": {
+            "apparmor": "box64andwine.apparmor",
+            "desktop":  "box64andwine.desktop"
+        }
+    },
+    "version": "0.1",
+    "maintainer": "Alfred Neumayer <dev.beidl@gmail.com>",
+    "framework" : "@CLICK_FRAMEWORK@"
+}

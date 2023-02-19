@@ -1,0 +1,19 @@
+{
+    "builder": "custom",
+    "default": "build",
+    "kill": "binarysupport",
+    "dependencies_host": [
+        "gcc-arm-linux-gnueabihf"
+    ],
+    "dependencies_target": [
+        "libfuse2"
+    ],
+    "install_lib": [
+        "/lib/${ARCH_TRIPLET}/libfuse.so*",
+        "/lib/${ARCH_TRIPLET}/libulockmgr.so*"
+    ],
+    "build": "${ROOT}/build.sh",
+    "make_jobs": 6,
+    "qt_version": "5.12",
+    "framework": "ubuntu-sdk-20.04"
+}
