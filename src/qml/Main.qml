@@ -33,10 +33,6 @@ MainView {
     width: units.gu(45)
     height: units.gu(75)
 
-    Component.onCompleted: {
-        VMManager.refreshVMs();
-    }
-
     AdaptivePageLayout {
         id: rootLayout
         anchors.fill: parent
@@ -45,26 +41,38 @@ MainView {
             id: mainPage
             header: PageHeader {
                 id: header
-                title: i18n.tr("Virtual machines")
+                title: i18n.tr("Box64 + Wine")
                 trailingActionBar {
                     actions: [
-                        Action {
+                        /*Action {
                             iconName: "info"
                             text: i18n.tr("Info")
-                            onTriggered: {
-                                mainPage.pageStack.addPageToNextColumn(mainPage, about)
-                            }
-                        },
-                        Action {
-                            iconName: "add"
-                            text: i18n.tr("Add VM")
-                            onTriggered: {
-                                mainPage.pageStack.addPageToNextColumn(mainPage,
-                                                                       addVmComponent.createObject(mainPage))
-                            }
-                        }
+                            onTriggered: { }
+                        }*/
                     ]
-                    numberOfSlots: 2
+                    numberOfSlots: 1
+                }
+            }
+
+            Column {
+                Row {
+                    CheckBox {
+                        enabled: false
+                        text: "Kernel support: " + checked ? "Not available" : "Available"
+                        checked: FeatureManager.supported
+                    }
+                }
+                Row {
+                    Switch {
+                        enabled: true
+                        text: "Enable x86_64 and PE executable support"
+                        onCheckedChanged: {
+                            if (checked)
+                                FeatureManager.enable()
+                            else
+                                FeatureManager.disable()
+                        }
+                    }
                 }
             }
         }

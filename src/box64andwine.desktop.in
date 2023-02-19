@@ -1,7 +1,6 @@
 [Desktop Entry]
-_Name=Pocket VMs
+_Name=Box64 + Wine
 Exec=box64andwine %U
-Icon=assets/logo.svg
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true

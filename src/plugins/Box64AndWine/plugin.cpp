@@ -18,9 +18,11 @@
 #include <QtQml/QQmlContext>
 
 #include "plugin.h"
+#include "commandrunner.h"
 #include "featuremanager.h"
 
 void ExamplePlugin::registerTypes(const char *uri) {
     //@uri FeatureManager
+    qmlRegisterSingletonType<CommandRunner>(uri, 1, 0, "CommandRunner", [](QQmlEngine*, QJSEngine*) -> QObject* { return new CommandRunner; });
     qmlRegisterSingletonType<FeatureManager>(uri, 1, 0, "FeatureManager", [](QQmlEngine*, QJSEngine*) -> QObject* { return new FeatureManager; });
 }

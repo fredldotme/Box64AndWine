@@ -4,6 +4,7 @@ set(PLUGIN "Box64AndWine")
 set(
     SRC
     plugin.cpp
+    commandrunner.cpp
     featuremanager.cpp
 )
 

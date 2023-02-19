@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: box64andwine.ubports\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-19 03:04+0000\n"
+"POT-Creation-Date: 2023-02-19 04:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/Main.qml:48
-msgid "Virtual machines"
-msgstr ""
-
-#: ../qml/Main.qml:53
-msgid "Info"
-msgstr ""
-
-#: ../qml/Main.qml:60
-msgid "Add VM"
+#: ../qml/Main.qml:44
+msgid "Box64 + Wine"
 msgstr ""
 
 #: box64andwine.desktop.in.h:1
