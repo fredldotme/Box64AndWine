@@ -35,6 +35,7 @@ public:
     FeatureManager();
     ~FeatureManager() = default;
 
+    Q_INVOKABLE void recheckSupport();
     Q_INVOKABLE bool enable();
     Q_INVOKABLE bool disable();
 

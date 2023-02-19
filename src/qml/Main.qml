@@ -28,7 +28,6 @@ MainView {
     applicationName: 'box64andwine.fredldotme'
     automaticOrientation: true
     anchorToKeyboard: true
-    theme.name: "Lomiri.Components.Themes.SuruDark"
 
     width: units.gu(45)
     height: units.gu(75)
@@ -55,6 +54,13 @@ MainView {
                 title: qsTr("Authentication required")
                 text: qsTr("Please enter your user PIN or password to continue:")
 
+                Connections {
+                    target: CommandRunner
+                    onPasswordRequested: {
+                        CommandRunner.providePassword(entry.text)
+                    }
+                }
+
                 Timer {
                     id: enterDelayTimer
                     interval: 1000
@@ -75,10 +81,10 @@ MainView {
 
                     enabled: !enterDelayTimer.running
                     onClicked: {
-                        CommandRunner.providePassword(entry.text)
                         if (CommandRunner.validatePassword()) {
                             PopupUtils.close(dialogue)
                             dialogIsOpen = false
+                            FeatureManager.recheckSupport();
                         } else {
                             enterDelayTimer.start()
                         }
@@ -104,11 +110,11 @@ MainView {
                 title: i18n.tr("Box64 + Wine")
                 trailingActionBar {
                     actions: [
-                        /*Action {
-                            iconName: "info"
-                            text: i18n.tr("Info")
-                            onTriggered: { }
-                        }*/
+                        Action {
+                            iconName: "view-refresh"
+                            text: i18n.tr("Recheck support")
+                            onTriggered: { FeatureManager.recheckSupport(); }
+                        }
                     ]
                     numberOfSlots: 1
                 }

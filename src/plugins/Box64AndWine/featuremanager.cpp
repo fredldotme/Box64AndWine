@@ -16,9 +16,8 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QDirIterator>
+#include <QDir>
 #include <QFile>
-#include <QFileInfo>
 #include <QString>
 #include <QVariant>
 
@@ -32,7 +31,13 @@ static const QString wine64conf = QStringLiteral("/opt/click.ubuntu.com/box64and
 
 FeatureManager::FeatureManager()
 {
+}
 
+void FeatureManager::recheckSupport()
+{
+    const QByteArray supportedFilesystems = m_commandRunner->readFile("/proc/filesystems");
+    m_supported = supportedFilesystems.contains("binfmt_misc");
+    emit supportedChanged();
 }
 
 bool FeatureManager::enable()
@@ -40,15 +45,11 @@ bool FeatureManager::enable()
     if (m_enabled)
         return false;
 
-    m_commandRunner->sudo(QStringList{"mount", "-o", "remount,rw", "/"});
-
-    const QByteArray box64contents = m_commandRunner->readFile(box64conf);
-    m_commandRunner->writeFile("/etc/binfmt.d/box64.conf", box64contents);
-
-    const QByteArray wine64contents = m_commandRunner->readFile(wine64conf);
-    m_commandRunner->writeFile("/etc/binfmt.d/wine64.conf", wine64contents);
-
-    m_commandRunner->sudo(QStringList{"mount", "-o", "remount,ro", "/"});
+    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,rw", "/"}, true);
+    m_commandRunner->sudo(QStringList{"/usr/bin/cp", box64conf, "/etc/binfmt.d/box64.conf"}, true);
+    m_commandRunner->sudo(QStringList{"/usr/bin/cp", wine64conf, "/etc/binfmt.d/wine64.conf"}, true);
+    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,ro", "/"}, true);
+    m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = true;
     emit enabledChanged();
@@ -59,6 +60,12 @@ bool FeatureManager::disable()
 {
     if (!m_enabled)
         return false;
+
+    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,rw", "/"}, true);
+    m_commandRunner->rm("/etc/binfmt.d/box64.conf");
+    m_commandRunner->rm("/etc/binfmt.d/wine64.conf");
+    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,ro", "/"}, true);
+    m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = false;
     emit enabledChanged();

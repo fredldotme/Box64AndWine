@@ -21,12 +21,14 @@ CommandRunner::CommandRunner(QObject *parent) :
     });
 }
 
-void CommandRunner::sudo(const QStringList &command)
+void CommandRunner::sudo(const QStringList &command, const bool waitForCompletion)
 {
     QStringList cmd = QStringList{"-S", "-p", "userpasswd"} + command;
     qDebug() << "running" << cmd.join(" ");
 
     this->m_process->start("sudo", cmd, QProcess::ReadWrite);
+    if (waitForCompletion)
+        this->m_process->waitForFinished();
 }
 
 QByteArray CommandRunner::readFile(const QString &absolutePath)
@@ -49,22 +51,11 @@ bool CommandRunner::writeFile(const QString &absolutePath, const QByteArray &val
     return (this->m_process->exitCode() == 0);
 }
 
-bool CommandRunner::mkDir(const QString &absolutePath)
+bool CommandRunner::rm(const QString& path)
 {
     const QStringList writeCommand {
         QStringLiteral("/bin/sh"), QStringLiteral("-c"),
-        QStringLiteral("/bin/mkdir '%1'").arg(absolutePath)
-    };
-    sudo(writeCommand);
-    this->m_process->waitForFinished();
-    return (this->m_process->exitCode() == 0);
-}
-
-bool CommandRunner::ln(const QString& source, const QString& newTarget)
-{
-    const QStringList writeCommand {
-        QStringLiteral("/bin/sh"), QStringLiteral("-c"),
-        QStringLiteral("/bin/ln -s '%1' '%2'").arg(source, newTarget)
+        QStringLiteral("/bin/rm '%1'").arg(path)
     };
     sudo(writeCommand);
     this->m_process->waitForFinished();
