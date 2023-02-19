@@ -125,8 +125,10 @@ MainView {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
+                spacing: units.gu(1)
 
                 Row {
+                    spacing: units.gu(1)
                     CheckBox {
                         enabled: false
                         text: "Kernel support: " + checked ? "Not available" : "Available"
@@ -134,9 +136,12 @@ MainView {
                     }
                 }
                 Row {
+                    spacing: units.gu(1)
+                    Label {
+                        text: "Enable x86_64 and PE executable support"
+                    }
                     Switch {
                         enabled: true
-                        text: "Enable x86_64 and PE executable support"
                         onCheckedChanged: {
                             if (checked)
                                 checked = FeatureManager.enable() ? true : false

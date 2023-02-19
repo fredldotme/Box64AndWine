@@ -38,6 +38,8 @@ void FeatureManager::recheckSupport()
     const QByteArray supportedFilesystems = m_commandRunner->readFile("/proc/filesystems");
     m_supported = supportedFilesystems.contains("binfmt_misc");
     emit supportedChanged();
+    m_enabled = QFile().exists("/etc/binfmt.d/box64.conf") && QFile().exists("/etc/binfmt.d/wine64.conf");
+    emit enabledChanged();
 }
 
 bool FeatureManager::enable()
