@@ -1,6 +1,10 @@
 #ifndef WRAPPER_COMMON_H
 #define WRAPPER_COMMON_H
 
+#include <unistd.h>
+#include <stdlib.h>
+#include <string>
+
 inline void setupEnvironment() {
     setenv("BOX64_LOG", "0", 1);
     setenv("BOX64_NOBANNER", "1", 1);
