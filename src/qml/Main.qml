@@ -104,7 +104,7 @@ MainView {
         id: mainPage
         header: PageHeader {
             id: header
-            title: i18n.tr("Box64 + Wine")
+            title: i18n.tr("Winebox")
         }
 
         Column {

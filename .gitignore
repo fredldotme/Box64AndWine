@@ -1,3 +1,4 @@
 .clickable/
 build/
 .DS_Store
+*.txt.user

@@ -2,7 +2,7 @@
     "name": "box64andwine.fredldotme",
     "description": "Support for box64 & WINE on Ubuntu Touch",
     "architecture": "@CLICK_ARCH@",
-    "title": "Box64 & Wine",
+    "title": "Winebox",
     "hooks": {
         "box64andwine": {
             "apparmor": "box64andwine.apparmor",
