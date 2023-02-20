@@ -18,24 +18,20 @@
 #define FEATUREMANAGER_H
 
 #include <QObject>
-#include <QString>
-#include <QVariantList>
-#include <QVariantMap>
 
 #include "commandrunner.h"
 
 class FeatureManager: public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(bool supported MEMBER m_supported NOTIFY supportedChanged)
-    Q_PROPERTY(bool enabled MEMBER m_enabled NOTIFY enabledChanged)
     Q_PROPERTY(CommandRunner* commandRunner MEMBER m_commandRunner NOTIFY commandRunnerChanged)
 
 public:
     FeatureManager();
     ~FeatureManager() = default;
 
-    Q_INVOKABLE void recheckSupport();
+    Q_INVOKABLE bool recheckSupport();
+    Q_INVOKABLE bool enabled();
     Q_INVOKABLE bool enable();
     Q_INVOKABLE bool disable();
 
@@ -46,8 +42,6 @@ private:
     CommandRunner* m_commandRunner;
 
 signals:
-    void supportedChanged();
-    void enabledChanged();
     void commandRunnerChanged();
 };
 

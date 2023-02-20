@@ -33,13 +33,20 @@ FeatureManager::FeatureManager()
 {
 }
 
-void FeatureManager::recheckSupport()
+bool FeatureManager::recheckSupport()
 {
     const QByteArray supportedFilesystems = m_commandRunner->readFile("/proc/filesystems");
-    m_supported = supportedFilesystems.contains("binfmt_misc");
-    emit supportedChanged();
-    m_enabled = QFile().exists("/etc/binfmt.d/box64.conf") && QFile().exists("/etc/binfmt.d/wine64.conf");
-    emit enabledChanged();
+    m_supported = supportedFilesystems.contains(QByteArrayLiteral("binfmt_misc"));
+    m_enabled =
+            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/box64.conf"}, true) == 0) &&
+            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/wine64.conf"}, true) == 0);
+
+    return m_supported;
+}
+
+bool FeatureManager::enabled()
+{
+    return m_enabled;
 }
 
 bool FeatureManager::enable()
@@ -47,14 +54,11 @@ bool FeatureManager::enable()
     if (m_enabled)
         return false;
 
-    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,rw", "/"}, true);
     m_commandRunner->sudo(QStringList{"/usr/bin/cp", box64conf, "/etc/binfmt.d/box64.conf"}, true);
     m_commandRunner->sudo(QStringList{"/usr/bin/cp", wine64conf, "/etc/binfmt.d/wine64.conf"}, true);
-    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,ro", "/"}, true);
     m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = true;
-    emit enabledChanged();
     return true;
 }
 
@@ -63,13 +67,10 @@ bool FeatureManager::disable()
     if (!m_enabled)
         return false;
 
-    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,rw", "/"}, true);
     m_commandRunner->rm("/etc/binfmt.d/box64.conf");
     m_commandRunner->rm("/etc/binfmt.d/wine64.conf");
-    m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-o", "remount,ro", "/"}, true);
     m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = false;
-    emit enabledChanged();
     return true;
 }

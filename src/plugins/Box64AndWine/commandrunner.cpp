@@ -21,14 +21,17 @@ CommandRunner::CommandRunner(QObject *parent) :
     });
 }
 
-void CommandRunner::sudo(const QStringList &command, const bool waitForCompletion)
+int CommandRunner::sudo(const QStringList &command, const bool waitForCompletion)
 {
     QStringList cmd = QStringList{"-S", "-p", "userpasswd"} + command;
     qDebug() << "running" << cmd.join(" ");
 
     this->m_process->start("sudo", cmd, QProcess::ReadWrite);
-    if (waitForCompletion)
+    if (waitForCompletion) {
         this->m_process->waitForFinished();
+        return this->m_process->exitCode();
+    }
+    return -1;
 }
 
 QByteArray CommandRunner::readFile(const QString &absolutePath)

@@ -11,7 +11,7 @@ class CommandRunner : public QObject
 public:
     explicit CommandRunner(QObject *parent = nullptr);
 
-    void sudo(const QStringList& command, const bool waitForCompletion = false);
+    int sudo(const QStringList& command, const bool waitForCompletion = false);
     QByteArray readFile(const QString& absolutePath);
     bool writeFile(const QString& absolutePath, const QByteArray& value);
     bool rm(const QString& path);

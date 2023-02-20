@@ -32,123 +32,119 @@ MainView {
     width: units.gu(45)
     height: units.gu(75)
 
-    AdaptivePageLayout {
-        id: rootLayout
-        anchors.fill: parent
-        primaryPage: mainPage
+    Component.onCompleted: {
+        FeatureManager.commandRunner = CommandRunner;
+        PopupUtils.open(dialog);
+    }
 
-        property bool dialogIsOpen: false
+    property bool checked : false
+    property bool supported : false
+    property bool featureEnabled : false
 
-        Component.onCompleted: {
-            FeatureManager.commandRunner = CommandRunner;
-            dialogIsOpen = true;
-            PopupUtils.open(dialog);
-        }
+    function recheckSupport() {
+        supported = FeatureManager.recheckSupport();
+        featureEnabled = FeatureManager.enabled();
+        checked = true;
+    }
 
-        // First start password entry
-        Component {
-            id: dialog
+    Component {
+        id: dialog
 
-            Dialog {
-                id: dialogue
-                title: qsTr("Authentication required")
-                text: qsTr("Please enter your user PIN or password to continue:")
+        Dialog {
+            id: dialogue
+            title: qsTr("Authentication required")
+            text: qsTr("Please enter your user PIN or password to continue:")
 
-                Connections {
-                    target: CommandRunner
-                    onPasswordRequested: {
-                        CommandRunner.providePassword(entry.text)
-                    }
+            Connections {
+                target: CommandRunner
+                onPasswordRequested: {
+                    CommandRunner.providePassword(entry.text)
                 }
+            }
 
-                Timer {
-                    id: enterDelayTimer
-                    interval: 1000
-                    running: false
-                    onTriggered: entry.text = ""
-                }
+            Timer {
+                id: enterDelayTimer
+                interval: 1000
+                running: false
+                onTriggered: entry.text = ""
+            }
+            TextField {
+                id: entry
+                placeholderText: qsTr("PIN or password")
+                echoMode: TextInput.Password
+                focus: true
+                enabled: !enterDelayTimer.running
+            }
+            Button {
+                text: qsTr("Ok")
+                color: theme.palette.normal.positive
 
-                TextField {
-                    id: entry
-                    placeholderText: qsTr("PIN or password")
-                    echoMode: TextInput.Password
-                    focus: true
-                    enabled: !enterDelayTimer.running
-                }
-                Button {
-                    text: qsTr("Ok")
-                    color: theme.palette.normal.positive
-
-                    enabled: !enterDelayTimer.running
-                    onClicked: {
-                        if (CommandRunner.validatePassword()) {
-                            PopupUtils.close(dialogue)
-                            dialogIsOpen = false
-                            FeatureManager.recheckSupport();
-                        } else {
-                            enterDelayTimer.start()
-                        }
-                    }
-                }
-
-                Button {
-                    text: qsTr("Cancel")
-                    enabled: !enterDelayTimer.running
-                    onClicked: {
+                enabled: !enterDelayTimer.running
+                onClicked: {
+                    if (CommandRunner.validatePassword()) {
                         PopupUtils.close(dialogue)
-                        dialogIsOpen = false
-                        Qt.quit()
+                        recheckSupport();
+                    } else {
+                        enterDelayTimer.start()
                     }
+                }
+            }
+            Button {
+                text: qsTr("Cancel")
+                enabled: !enterDelayTimer.running
+                onClicked: {
+                    PopupUtils.close(dialogue)
+                    Qt.quit()
                 }
             }
         }
+    }
 
-        Page {
-            id: mainPage
-            header: PageHeader {
-                id: header
-                title: i18n.tr("Box64 + Wine")
-                trailingActionBar {
-                    actions: [
-                        Action {
-                            iconName: "view-refresh"
-                            text: i18n.tr("Recheck support")
-                            onTriggered: { FeatureManager.recheckSupport(); }
-                        }
-                    ]
-                    numberOfSlots: 1
-                }
+    Page {
+        id: mainPage
+        header: PageHeader {
+            id: header
+            title: i18n.tr("Box64 + Wine")
+        }
+
+        Column {
+            visible: root.checked
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: units.gu(1)
+
+            Icon {
+                width: Math.min(root.width, root.height) / 2
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: width
+                name: root.supported ? "tick" : "close"
             }
-
-            Column {
-                anchors.top: header.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
+            Label {
+                width: Math.min(root.width, root.height) / 2
+                text: "Kernel support: " + (root.supported ?
+                                                "Available" :
+                                                "Not available. Please contact your device port "+
+                                                "maintainer to enable binfmt_misc functionality "+
+                                                "for this device.")
+                wrapMode: Text.WordWrap
+            }
+            Item {
+                height: units.gu(4)
+            }
+            Row {
                 spacing: units.gu(1)
-
-                Row {
-                    spacing: units.gu(1)
-                    CheckBox {
-                        enabled: false
-                        text: "Kernel support: " + checked ? "Not available" : "Available"
-                        checked: FeatureManager.supported
+                Switch {
+                    id: enablementSwitch
+                    enabled: supported
+                    onCheckedChanged: {
+                        if (checked)
+                            featureEnabled = FeatureManager.enable() ? true : false
+                        else
+                            featureEnabled = FeatureManager.disable() ? false : true
                     }
                 }
-                Row {
-                    spacing: units.gu(1)
-                    Label {
-                        text: "Enable x86_64 and PE executable support"
-                    }
-                    Switch {
-                        enabled: true
-                        onCheckedChanged: {
-                            if (checked)
-                                checked = FeatureManager.enable() ? true : false
-                            else
-                                checked = FeatureManager.disable() ? false : true
-                        }
-                    }
+                Label {
+                    text: "Enable x86_64 and PE executable support"
                 }
             }
         }
