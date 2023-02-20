@@ -37,15 +37,15 @@ bool FeatureManager::recheckSupport()
 {
     const QByteArray supportedFilesystems = m_commandRunner->readFile("/proc/filesystems");
     m_supported = supportedFilesystems.contains(QByteArrayLiteral("binfmt_misc"));
-    m_enabled =
-            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/box64.conf"}, true) == 0) &&
-            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/wine64.conf"}, true) == 0);
 
     return m_supported;
 }
 
 bool FeatureManager::enabled()
 {
+    m_enabled =
+            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/box64.conf"}, true) == 0) &&
+            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/wine64.conf"}, true) == 0);
     return m_enabled;
 }
 

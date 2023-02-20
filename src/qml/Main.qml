@@ -136,6 +136,7 @@ MainView {
                 Switch {
                     id: enablementSwitch
                     enabled: supported
+                    checked: featureEnabled
                     onCheckedChanged: {
                         if (checked)
                             featureEnabled = FeatureManager.enable() ? true : false

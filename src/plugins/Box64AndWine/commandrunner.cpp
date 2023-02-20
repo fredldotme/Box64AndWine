@@ -29,6 +29,7 @@ int CommandRunner::sudo(const QStringList &command, const bool waitForCompletion
     this->m_process->start("sudo", cmd, QProcess::ReadWrite);
     if (waitForCompletion) {
         this->m_process->waitForFinished();
+        qDebug() << this->m_process->exitCode();
         return this->m_process->exitCode();
     }
     return -1;
