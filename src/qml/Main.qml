@@ -121,6 +121,8 @@ MainView {
             }
             Label {
                 width: Math.min(root.width, root.height) / 2
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
                 text: "Kernel support: " + (root.supported ?
                                                 "Available" :
                                                 "Not available. Please contact your device port "+
