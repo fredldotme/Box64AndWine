@@ -3,4 +3,4 @@
 	url = https://github.com/fredldotme/box64.git
 [submodule "3rdparty/gl4es"]
 	path = 3rdparty/gl4es
-	url = https://github.com/ptitSeb/gl4es.git
+	url = https://github.com/fredldotme/gl4es.git
