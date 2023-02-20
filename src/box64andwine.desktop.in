@@ -1,6 +1,7 @@
 [Desktop Entry]
 _Name=Winebox
 Exec=box64andwine %U
+Icon=assets/logo.png
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true
