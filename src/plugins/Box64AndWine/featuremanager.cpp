@@ -26,9 +26,6 @@
 
 #include "featuremanager.h"
 
-static const QString box64conf = QStringLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current/box64.conf");
-static const QString wine64conf = QStringLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current/wine64.conf");
-
 FeatureManager::FeatureManager()
 {
 }
@@ -44,8 +41,7 @@ bool FeatureManager::recheckSupport()
 bool FeatureManager::enabled()
 {
     m_enabled =
-            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/box64.conf"}, true) == 0) &&
-            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/wine64.conf"}, true) == 0);
+            (m_commandRunner->sudo(QStringList{"/usr/bin/test", "-f", "/etc/binfmt.d/box64andwine.fredldotme.conf"}, true) == 0);
     return m_enabled;
 }
 
@@ -54,8 +50,11 @@ bool FeatureManager::enable()
     if (m_enabled)
         return false;
 
-    m_commandRunner->sudo(QStringList{"/usr/bin/cp", box64conf, "/etc/binfmt.d/box64.conf"}, true);
-    m_commandRunner->sudo(QStringList{"/usr/bin/cp", wine64conf, "/etc/binfmt.d/wine64.conf"}, true);
+    QByteArray contents =
+            m_commandRunner->readFile(QCoreApplication::applicationDirPath() + QStringLiteral("/winebox.conf"));
+    contents.replace(QByteArrayLiteral("@CURRENT_BIN@"),
+                     QByteArrayLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current"));
+    m_commandRunner->writeFile("/etc/binfmt.d/box64andwine.fredldotme.conf", contents);
     m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = true;
@@ -67,8 +66,7 @@ bool FeatureManager::disable()
     if (!m_enabled)
         return false;
 
-    m_commandRunner->rm("/etc/binfmt.d/box64.conf");
-    m_commandRunner->rm("/etc/binfmt.d/wine64.conf");
+    m_commandRunner->rm("/etc/binfmt.d/box64andwine.fredldotme.conf");
     m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = false;
