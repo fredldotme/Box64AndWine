@@ -9,7 +9,7 @@
             "desktop":  "box64andwine.desktop"
         }
     },
-    "version": "0.1",
+    "version": "0.2",
     "maintainer": "Alfred Neumayer <dev.beidl@gmail.com>",
     "framework" : "@CLICK_FRAMEWORK@"
 }
