@@ -150,8 +150,8 @@ export PATH=/usr/lib/ccache:$PATH
 build_project
 
 # Build included components
-build_3rdparty_cmake gl4es "-DBCMHOST=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo"
-build_3rdparty_cmake box64 "-DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+build_3rdparty_cmake gl4es "-DNO_GBM=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine

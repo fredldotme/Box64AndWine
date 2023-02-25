@@ -50,11 +50,17 @@ bool FeatureManager::enable()
     if (m_enabled)
         return false;
 
+    const bool isMounted =
+            (m_commandRunner->sudo(QStringList{"/usr/bin/mountpoint", "-q", "/proc/sys/fs/binfmt_misc"}, true)) == 0;
+
     QByteArray contents =
             m_commandRunner->readFile(QCoreApplication::applicationDirPath() + QStringLiteral("/winebox.conf"));
     contents.replace(QByteArrayLiteral("@CURRENT_BIN@"),
                      QByteArrayLiteral("/opt/click.ubuntu.com/box64andwine.fredldotme/current"));
     m_commandRunner->writeFile("/etc/binfmt.d/box64andwine.fredldotme.conf", contents);
+
+    if (!isMounted)
+        m_commandRunner->sudo(QStringList{"/usr/bin/mount", "-t", "binfmt_misc", "binfmt", "/proc/sys/fs/binfmt_misc"}, true);
     m_commandRunner->sudo(QStringList{"/usr/bin/systemctl", "restart", "systemd-binfmt"}, true);
 
     m_enabled = true;
