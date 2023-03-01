@@ -3,7 +3,14 @@
     "default": "build",
     "kill": "binarysupport",
     "dependencies_host": [
-        "gcc-arm-linux-gnueabihf"
+        "gcc-arm-linux-gnueabihf",
+        "g++-arm-linux-gnueabihf",
+        "debootstrap",
+        "fakeroot",
+        "fakechroot",
+        "qemu-user-static",
+        "libc6-dev-armhf-cross",
+        "patchelf"
     ],
     "dependencies_target": [
         "libfuse2",
@@ -16,7 +23,7 @@
     "install_bin": [
         "/usr/bin/fusermount"
     ],
-    "build": "${ROOT}/build.sh",
+    "build": "${ROOT}/build.sh -c",
     "make_jobs": 6,
     "qt_version": "5.12",
     "framework": "ubuntu-sdk-20.04"

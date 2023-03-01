@@ -17,10 +17,14 @@ inline void prependEnvVar(const char* key, const char* value)
 
 inline void setupEnvironment()
 {
-    setenv("BOX64_LOG", "0", 1);
-    setenv("BOX64_NOBANNER", "1", 1);
-    setenv("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/x86_64-linux-gnu", 1);
-    prependEnvVar("LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/aarch64-linux-gnu");
+    setenv("BOX64_LOG", "0", 0);
+    setenv("BOX64_NOBANNER", "1", 0);
+    setenv("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/x86_64-linux-gnu", 0);
+
+    setenv("BOX86_LOG", "0", 0);
+    setenv("BOX86_NOBANNER", "1", 0);
+    setenv("BOX86_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/i386-linux-gnu", 0);
+
     prependEnvVar("PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/aarch64-linux-gnu/bin");
 }
 

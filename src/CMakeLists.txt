@@ -73,7 +73,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION ${CMA
 
 add_subdirectory(po)
 add_subdirectory(plugins)
-add_subdirectory(wrappers)
 
 # Make source files visible in qtcreator
 file(GLOB_RECURSE PROJECT_SRC_FILES

@@ -4,3 +4,6 @@
 [submodule "3rdparty/gl4es"]
 	path = 3rdparty/gl4es
 	url = https://github.com/fredldotme/gl4es.git
+[submodule "3rdparty/box86"]
+	path = 3rdparty/box86
+	url = https://github.com/fredldotme/box86.git
