@@ -189,27 +189,25 @@ export CCACHE_DIR=$BUILD_DIR/ccache
 export PATH=/usr/lib/ccache:$PATH
 
 # Commonly used armhf cross-build CMake arguments
-CMAKE_ARMHF_ARGS="-DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_AR=/usr/bin/arm-linux-gnueabihf-ar -DCMAKE_LINKER=/usr/bin/arm-linux-gnueabihf-ld -DCMAKE_SYSROOT=$INSTALL/sysroot/armhf"
+CMAKE_ARMHF_ARGS="-DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_AR=/usr/bin/arm-linux-gnueabihf-ar -DCMAKE_LINKER=/usr/bin/arm-linux-gnueabihf-ld -DCMAKE_RANLIB=/usr/bin/arm-linux-gnueabihf-ranlib"
 
 # Fetch & create armhf sysroot
-if [ -d $BUILD_DIR/sysroot/armhf ]; then
-    rm -rf $BUILD_DIR/sysroot/armhf
+if [ "$CLEAN" == "1" ]; then
+    if [ -d $BUILD_DIR/sysroot/armhf ]; then
+        rm -rf $BUILD_DIR/sysroot/armhf
+    fi
+    mkdir -p $BUILD_DIR/sysroot/armhf
 fi
-mkdir -p $BUILD_DIR/sysroot/armhf
 
-if [ -d $INSTALL/sysroot/armhf ]; then
-    rm -rf $INSTALL/sysroot/armhf
+if [ "$CLEAN" == "1" ]; then
+    if [ -d $INSTALL/sysroot/armhf ]; then
+        rm -rf $INSTALL/sysroot/armhf
+    fi
+    mkdir -p $INSTALL/sysroot/armhf
 fi
-mkdir -p $INSTALL/sysroot/armhf
 
-fakeroot fakechroot debootstrap \
-    --arch armhf \
-    --components=main,restricted,universe \
-    --include=libgtk-3-0,libx11-dev \
-    --variant=fakechroot \
-    --foreign \
-    focal \
-    $INSTALL/sysroot/armhf
+wget -O $BUILD_DIR/sysroot/armhf.tar.gz https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-hybris-rootfs-armhf.tar.gz
+tar xvf $BUILD_DIR/sysroot/armhf.tar.gz -C $INSTALL/sysroot/armhf
 
 # Build main sources
 build_project
@@ -218,7 +216,7 @@ build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
 # 32bit
-#build_3rdparty_cmake gl4es "-DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake gl4es "-DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
 build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
 
 # Use shipped linker with box86 directly as well
@@ -228,7 +226,7 @@ patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current
 build_3rdparty_cmake gl4es "-DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
 build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
-# Remove unnecessary cruft
+# Remove unnecessary cruft after compilation
 rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include}
 rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var}
 
