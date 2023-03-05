@@ -1,16 +1,17 @@
 # Winebox
 
-Run Linux and Windows x86_64 binaries on your ARM64  Ubuntu Touch device
+Run Linux and Windows x86_64 binaries on your ARM64 Ubuntu Touch device
 
 
 
 ## Includes
 
-- Wine
-- Box86
-- Box64
-- GL4ES
-- A minimal set of libraries, fetched from the Ubuntu archive
+- Wine (LGPL v2.1+)
+- Box86 (MIT)
+- Box64 (MIT)
+- GL4ES (MIT)
+- pe-parse (MIT)
+- Various libraries fetched from the Ubuntu & UBports archives
 
 
 
