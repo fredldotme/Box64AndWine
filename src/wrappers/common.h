@@ -25,6 +25,9 @@ inline void setupEnvironment()
     setenv("BOX86_NOBANNER", "1", 0);
     setenv("BOX86_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/i386-linux-gnu", 0);
 
+    setenv("LIBGL_FB", "1", 0);
+    setenv("EGL_PLATFORM", "null", 0);
+
     prependEnvVar("PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/aarch64-linux-gnu/bin");
 }
 

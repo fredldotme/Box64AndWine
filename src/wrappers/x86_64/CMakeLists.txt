@@ -17,3 +17,11 @@ set(
 add_executable(wine64wrapper ${SRC_WINE64})
 target_link_libraries(wine64wrapper -static)
 install(TARGETS wine64wrapper RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+set(
+    SRC_WINEDETECT
+    winedetect.cpp
+)
+add_executable(winedetect ${SRC_WINEDETECT})
+target_link_libraries(winedetect -static pe-parse)
+install(TARGETS winedetect RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})

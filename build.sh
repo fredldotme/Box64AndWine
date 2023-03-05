@@ -113,8 +113,8 @@ function build_cmake {
             cmake .. \
             -DCMAKE_INSTALL_PREFIX=$INSTALL \
             -DCMAKE_MODULE_PATH=$INSTALL \
-            -DCMAKE_CXX_FLAGS="-isystem $INSTALL/include -L$INSTALL/lib -Wno-deprecated-declarations -Wl,-rpath-link,$INSTALL/lib" \
-            -DCMAKE_C_FLAGS="-isystem $INSTALL/include -L$INSTALL/lib -Wno-deprecated-declarations -Wl,-rpath-link,$INSTALL/lib" \
+            -DCMAKE_CXX_FLAGS="-isystem $INSTALL/include -L$INSTALL/lib -Wno-deprecated-declarations -Wno-missing-include-dirs -Wl,-rpath-link,$INSTALL/lib" \
+            -DCMAKE_C_FLAGS="-isystem $INSTALL/include -L$INSTALL/lib -Wno-deprecated-declarations -Wno-missing-include-dirs -Wl,-rpath-link,$INSTALL/lib" \
             -DCMAKE_LD_FLAGS="-L$INSTALL/lib" \
             -DCMAKE_LIBRARY_PATH=$INSTALL/lib $@
         make VERBOSE=1 -j$NUM_PROCS
@@ -191,6 +191,13 @@ export PATH=/usr/lib/ccache:$PATH
 # Commonly used armhf cross-build CMake arguments
 CMAKE_ARMHF_ARGS="-DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_AR=/usr/bin/arm-linux-gnueabihf-ar -DCMAKE_LINKER=/usr/bin/arm-linux-gnueabihf-ld -DCMAKE_RANLIB=/usr/bin/arm-linux-gnueabihf-ranlib"
 
+# Build pe-parse 
+build_3rdparty_cmake pe-parse
+
+# Build main 64bit sources
+build_project
+build_wrappers x86_64
+
 # Fetch & create armhf sysroot
 if [ "$CLEAN" == "1" ]; then
     if [ -d $BUILD_DIR/sysroot/armhf ]; then
@@ -217,9 +224,7 @@ for f in $(ls *.deb); do dpkg -x $f $BUILD_DIR/sysroot/tmp; done
 cp -a $BUILD_DIR/sysroot/tmp/* $INSTALL/sysroot/armhf
 rm -rf $BUILD_DIR/sysroot/tmp
 
-# Build main sources
-build_project
-build_wrappers x86_64
+# Build wrappers for i386
 build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
