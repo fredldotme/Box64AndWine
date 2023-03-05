@@ -7,3 +7,6 @@
 [submodule "3rdparty/box86"]
 	path = 3rdparty/box86
 	url = https://github.com/fredldotme/box86.git
+[submodule "3rdparty/pe-parse"]
+	path = 3rdparty/pe-parse
+	url = https://github.com/fredldotme/pe-parse.git
