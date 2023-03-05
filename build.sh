@@ -229,14 +229,14 @@ build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
 # 32bit
-build_3rdparty_cmake_sysroot gl4es "-DGLVND=ON -DHYBRIS=ON -DNO_GBM=ON -DGLX_STUBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot gl4es "-DEGL_WRAPPER=ON -DGLVND=OFF -DHYBRIS=ON -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
 build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
 
 # Use shipped linker with box86 directly as well
 patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
 
 # 64bit
-build_3rdparty_cmake gl4es "-DGLVND=ON -DHYBRIS=ON -DNO_GBM=ON -DGLX_STUBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
+build_3rdparty_cmake gl4es "-DEGL_WRAPPER=ON -DGLVND=OFF -DHYBRIS=ON -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
 build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Remove unnecessary cruft after compilation
