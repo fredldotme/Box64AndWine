@@ -209,6 +209,14 @@ fi
 wget -O $BUILD_DIR/sysroot/armhf.tar.gz https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-hybris-rootfs-armhf.tar.gz
 tar xvf $BUILD_DIR/sysroot/armhf.tar.gz -C $INSTALL/sysroot/armhf
 
+# Requirements for compilation
+cd $BUILD_DIR
+wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-6_1.6.9-2ubuntu1.2_armhf.deb
+wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-dev_1.6.9-2ubuntu1.2_armhf.deb
+for f in $(ls *.deb); do dpkg -x $f $BUILD_DIR/sysroot/tmp; done
+cp -a $BUILD_DIR/sysroot/tmp/* $INSTALL/sysroot/armhf
+rm -rf $BUILD_DIR/sysroot/tmp
+
 # Build main sources
 build_project
 build_wrappers x86_64
@@ -216,14 +224,14 @@ build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
 # 32bit
-build_3rdparty_cmake gl4es "-DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot gl4es "-DGLVND=ON -DHYBRIS=ON -DNO_GBM=ON -DGLX_STUBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
 build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
 
 # Use shipped linker with box86 directly as well
 patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
 
 # 64bit
-build_3rdparty_cmake gl4es "-DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
+build_3rdparty_cmake gl4es "-DGLVND=ON -DHYBRIS=ON -DNO_GBM=ON -DGLX_STUBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
 build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Remove unnecessary cruft after compilation
