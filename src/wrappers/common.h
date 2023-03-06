@@ -25,8 +25,10 @@ inline void setupEnvironment()
     setenv("BOX86_NOBANNER", "1", 0);
     setenv("BOX86_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/i386-linux-gnu", 0);
 
+#if 0
     setenv("LIBGL_FB", "1", 0);
     setenv("HYBRIS_EGLPLATFORM", "null", 0);
+#endif
 
     prependEnvVar("PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/aarch64-linux-gnu/bin");
 }
