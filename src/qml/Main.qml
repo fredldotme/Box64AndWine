@@ -147,7 +147,7 @@ MainView {
                     }
                 }
                 Label {
-                    text: "Enable x86_64 and PE executable support"
+                    text: "Enable additional executable support"
                 }
             }
         }
