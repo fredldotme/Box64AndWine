@@ -241,7 +241,12 @@ build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Remove unnecessary cruft after compilation
 rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include}
-rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var}
+rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var,mnt}
+rm -rf $INSTALL/sysroot/armhf/{firmware,vendor,product,factory,system,persist,data,metadata,odm,cache,apex}
+rm -rf $INSTALL/sysroot/armhf/usr/lib/systemd
+rm -rf $INSTALL/sysroot/armhf/usr/lib/python*
+rm -rf $INSTALL/sysroot/armhf/usr/lib/ssl
+rm -rf $INSTALL/sysroot/armhf/usr/lib/environment.d
 
 if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
