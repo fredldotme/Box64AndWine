@@ -192,11 +192,11 @@ export PATH=/usr/lib/ccache:$PATH
 CMAKE_ARMHF_ARGS="-DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_AR=/usr/bin/arm-linux-gnueabihf-ar -DCMAKE_LINKER=/usr/bin/arm-linux-gnueabihf-ld -DCMAKE_RANLIB=/usr/bin/arm-linux-gnueabihf-ranlib"
 
 # Build pe-parse 
-build_3rdparty_cmake pe-parse
+#build_3rdparty_cmake pe-parse
 
 # Build main 64bit sources
-build_project
-build_wrappers x86_64
+#build_project
+#build_wrappers x86_64
 
 # Fetch & create armhf sysroot
 if [ "$CLEAN" == "1" ]; then
@@ -225,28 +225,28 @@ cp -a $BUILD_DIR/sysroot/tmp/* $INSTALL/sysroot/armhf
 rm -rf $BUILD_DIR/sysroot/tmp
 
 # Build wrappers for i386
-build_wrappers i386 "$CMAKE_ARMHF_ARGS"
+#build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
 # 32bit
-build_3rdparty_cmake_sysroot gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
-build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
+#build_3rdparty_cmake_sysroot gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
+#build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
 
 # Use shipped linker with box86 directly as well
-patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
+#patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
 
 # 64bit
-build_3rdparty_cmake gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
-build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+#build_3rdparty_cmake gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
+#build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Remove unnecessary cruft after compilation
 rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include}
-rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var,mnt}
-rm -rf $INSTALL/sysroot/armhf/{firmware,vendor,product,factory,system,persist,data,metadata,odm,cache,apex}
-rm -rf $INSTALL/sysroot/armhf/usr/lib/systemd
-rm -rf $INSTALL/sysroot/armhf/usr/lib/python*
-rm -rf $INSTALL/sysroot/armhf/usr/lib/ssl
-rm -rf $INSTALL/sysroot/armhf/usr/lib/environment.d
+#rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var,mnt}
+#rm -rf $INSTALL/sysroot/armhf/{firmware,vendor,product,factory,system,persist,data,metadata,odm,cache,apex}
+#rm -rf $INSTALL/sysroot/armhf/usr/lib/systemd
+#rm -rf $INSTALL/sysroot/armhf/usr/lib/python*
+#rm -rf $INSTALL/sysroot/armhf/usr/lib/ssl
+#rm -rf $INSTALL/sysroot/armhf/usr/lib/environment.d
 
 if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
