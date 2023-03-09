@@ -16,7 +16,10 @@
     "dependencies_target": [
         "libglvnd-dev",
         "libfuse2",
-        "fuse"
+        "libwayland-dev",
+        "libxmp-dev",
+        "fuse",
+        "wayland-protocols"
     ],
     "install_lib": [
         "/lib/${ARCH_TRIPLET}/libfuse.so*",

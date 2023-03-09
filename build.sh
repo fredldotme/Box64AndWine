@@ -198,6 +198,15 @@ build_3rdparty_cmake pe-parse
 build_project
 build_wrappers x86_64
 
+# Build SDL
+build_3rdparty_cmake SDL
+build_3rdparty_cmake SDL_image "-DSDL2IMAGE_VENDORED=ON"
+build_3rdparty_cmake SDL_mixer "-DSDL2MIXER_VENDORED=ON"
+
+# x86_64 support with OpenGL
+build_3rdparty_cmake gl4es "-DGLVND=ON -DHYBRIS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
+build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+
 # Fetch & create armhf sysroot
 if [ "$CLEAN" == "1" ]; then
     if [ -d $BUILD_DIR/sysroot/armhf ]; then
@@ -227,17 +236,18 @@ rm -rf $BUILD_DIR/sysroot/tmp
 # Build wrappers for i386
 build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
+# Build SDL
+build_3rdparty_cmake_sysroot SDL "$CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot SDL_image "$CMAKE_ARMHF_ARGS -DSDL2IMAGE_VENDORED=ON"
+build_3rdparty_cmake_sysroot SDL_mixer "$CMAKE_ARMHF_ARGS -DSDL2MIXER_VENDORED=ON"
+
 # Build included components
 # 32bit
-build_3rdparty_cmake_sysroot gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot gl4es "-DGLVND=ON -DHYBRIS=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
 build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
 
 # Use shipped linker with box86 directly as well
 patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
-
-# 64bit
-build_3rdparty_cmake gl4es "-DGLVND=OFF -DHYBRIS=OFF -DNO_GBM=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
-build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Remove unnecessary cruft after compilation
 rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include}

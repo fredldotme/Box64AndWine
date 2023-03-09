@@ -10,3 +10,12 @@
 [submodule "3rdparty/pe-parse"]
 	path = 3rdparty/pe-parse
 	url = https://github.com/fredldotme/pe-parse.git
+[submodule "3rdparty/SDL"]
+	path = 3rdparty/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "3rdparty/SDL_image"]
+	path = 3rdparty/SDL_image
+	url = https://github.com/libsdl-org/SDL_image.git
+[submodule "3rdparty/SDL_mixer"]
+	path = 3rdparty/SDL_mixer
+	url = https://github.com/libsdl-org/SDL_mixer.git
