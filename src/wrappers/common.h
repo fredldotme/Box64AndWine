@@ -19,16 +19,18 @@ inline void setupEnvironment()
 {
     setenv("BOX64_LOG", "0", 0);
     setenv("BOX64_NOBANNER", "1", 0);
-    setenv("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/x86_64-linux-gnu", 0);
+    prependEnvVar("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/amd64/lib/x86_64-linux-gnu");
+    prependEnvVar("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/x86_64-linux-gnu");
+    setenv("BOX64_BASH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/amd64/usr/bin/bash", 0);
 
     setenv("BOX86_LOG", "0", 0);
     setenv("BOX86_NOBANNER", "1", 0);
-    setenv("BOX86_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/i386-linux-gnu", 0);
+    prependEnvVar("BOX86_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/i386-linux-gnu");
 
-#if 0
-    setenv("LIBGL_FB", "1", 0);
+    setenv("LIBGL_NOBANNER", "1", 0);
+    setenv("LIBGL_SILENTSTUB", "1", 0);
+    setenv("LIBGL_FB", "3", 0);
     setenv("HYBRIS_EGLPLATFORM", "null", 0);
-#endif
 
     prependEnvVar("PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/aarch64-linux-gnu/bin");
 }

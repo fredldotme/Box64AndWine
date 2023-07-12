@@ -11,7 +11,8 @@
         "qemu-user-static",
         "libc6-dev-armhf-cross",
         "libx11-dev",
-        "patchelf"
+        "patchelf",
+        "apt-rdepends"
     ],
     "dependencies_target": [
         "libglvnd-dev",
@@ -19,11 +20,21 @@
         "libwayland-dev",
         "libxmp-dev",
         "fuse",
-        "wayland-protocols"
+        "wayland-protocols",
+        "libappindicator1",
+        "libsdl2-image-2.0-0",
+        "libsdl2-mixer-2.0-0",
+        "libsdl1.2debian"
     ],
     "install_lib": [
         "/lib/${ARCH_TRIPLET}/libfuse.so*",
-        "/lib/${ARCH_TRIPLET}/libulockmgr.so*"
+        "/lib/${ARCH_TRIPLET}/libulockmgr.so*",
+        "/lib/${ARCH_TRIPLET}/libappindicator.so*",
+        "/lib/${ARCH_TRIPLET}/libSDL-*.so*",
+        "/lib/${ARCH_TRIPLET}/libSDL2_image-2.0.so*",
+        "/lib/${ARCH_TRIPLET}/libSDL2_mixer-2.0.so*",
+        "/lib/libopusfile.so*",
+        "/lib/libopusurl.so*"
     ],
     "install_bin": [
         "/usr/bin/fusermount"
