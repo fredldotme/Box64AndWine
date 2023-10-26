@@ -237,8 +237,8 @@ build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
 # Requirements for compilation
 cd $BUILD_DIR
-wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-6_1.6.9-2ubuntu1.5_armhf.deb
-wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-dev_1.6.9-2ubuntu1.5_armhf.deb
+wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-6_1.6.9-2ubuntu1.6_armhf.deb
+wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-dev_1.6.9-2ubuntu1.6_armhf.deb
 
 # Mostly runtime libs for better app support (GTK, Steam)
 wget http://ports.ubuntu.com/pool/universe/liba/libappindicator/libappindicator1_12.10.1+20.04.20200408.1-0ubuntu1_armhf.deb
