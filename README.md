@@ -3,9 +3,16 @@
 Run Linux and Windows x86_64 binaries on your ARM64 Ubuntu Touch device
 
 ## How to build
+
 - Get [Clickable](https://clickable-ut.dev)
 - Clone the repository: `git clone --recursive https://github.com/fredldotme/Box64AndWine.git`
 - Run the `clickable` command inside the cloned directory
+
+
+## Prerequisites
+
+- binftm enabled in the kernel
+
 
 ## Includes
 
@@ -15,7 +22,6 @@ Run Linux and Windows x86_64 binaries on your ARM64 Ubuntu Touch device
 - GL4ES (MIT)
 - pe-parse (MIT)
 - Various libraries fetched from the Ubuntu & UBports archives
-
 
 
 ## Usage
