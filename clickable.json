@@ -3,8 +3,10 @@
     "default": "build",
     "kill": "binarysupport",
     "dependencies_host": [
-        "gcc-arm-linux-gnueabihf",
-        "g++-arm-linux-gnueabihf",
+        "gcc-9-aarch64-linux-gnu",
+        "gcc-9-arm-linux-gnueabihf",
+        "g++-9-aarch64-linux-gnu",
+        "g++-9-arm-linux-gnueabihf",
         "debootstrap",
         "fakeroot",
         "fakechroot",
