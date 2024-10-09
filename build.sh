@@ -231,6 +231,7 @@ build_wrappers x86_64
 # x86_64 support with OpenGL
 build_3rdparty_cmake gl4es "-DGLVND=OFF -DHYBRIS=ON -DNOX11=OFF -DNOEGL=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
 build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+build_3rdparty_cmake sdl12-compat "-DSDL12TESTS=OFF -DSDL12DEVEL=OFF"
 
 # glvnd-compatible naming
 # mv $INSTALL/usr/lib/aarch64-linux-gnu/gl4es/libGL.so.1 $INSTALL/usr/lib/aarch64-linux-gnu/gl4es/libGLX_gl4es.so.0  
@@ -305,7 +306,7 @@ if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
 fi
 mkdir -p $INSTALL/wine
-wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/8.4/wine-8.4-staging-amd64.tar.xz
+wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/9.19/wine-9.19-staging-amd64.tar.xz
 tar xvf $BUILD_DIR/wine.tar.xz -C $INSTALL/wine --strip-components=1
 
 exit 0
