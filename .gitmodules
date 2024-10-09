@@ -19,3 +19,6 @@
 [submodule "3rdparty/SDL_mixer"]
 	path = 3rdparty/SDL_mixer
 	url = https://github.com/libsdl-org/SDL_mixer.git
+[submodule "3rdparty/sdl12-compat"]
+	path = 3rdparty/sdl12-compat
+	url = https://github.com/libsdl-org/sdl12-compat.git
