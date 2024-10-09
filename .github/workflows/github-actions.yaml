@@ -1,0 +1,36 @@
+name: CI/CD
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  CI:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          sudo snap install docker
+          sudo snap install clickable
+          sudo snap connect clickable:docker docker
+          sudo snap connect clickable:home
+          sudo snap connect clickable:removable-media
+          sudo snap connect clickable:network
+          sudo snap connect clickable:network-bind
+          sudo snap connect clickable:raw-usb
+          sudo snap connect clickable:ssh-keys
+          sudo snap connect clickable:ssh-public-keys
+          sudo snap connect clickable:adb-support
+          clickable build --arch arm64 --skip-review
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: |
+            build/aarch64-linux-gnu/app/*.click
