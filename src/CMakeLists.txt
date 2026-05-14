@@ -24,7 +24,7 @@ set(DESKTOP_FILE_NAME ${PROJECT_NAME}.desktop)
 if(DEFINED ENV{SDK_FRAMEWORK})
     set(CLICK_FRAMEWORK "$ENV{SDK_FRAMEWORK}")
 else()
-    set(CLICK_FRAMEWORK "ubuntu-sdk-20.04")
+    set(CLICK_FRAMEWORK "ubuntu-touch-24.04-1.x")
 endif()
 
 # This figures out the target architecture for use in the manifest file.

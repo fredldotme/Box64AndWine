@@ -201,8 +201,9 @@ mkdir -p $BUILD_DIR/sysroot/armhf
 mkdir -p $INSTALL/sysroot/armhf
 
 # armhf for box86 libraries
-wget -O $BUILD_DIR/sysroot/armhf.tar.gz https://ci.ubports.com/job/focal-hybris-rootfs-arm64/job/master/lastSuccessfulBuild/artifact/ubuntu-touch-hybris-rootfs-armhf.tar.gz
+wget -O $BUILD_DIR/sysroot/armhf.tar.gz https://ci.ubports.com/job/ubuntu-touch-rootfs/job/ubports%252F24.04-1.x/lastSuccessfulBuild/artifact/ubuntu-touch-hybris-rootfs-armhf.tar.gz
 tar xvf $BUILD_DIR/sysroot/armhf.tar.gz -C $INSTALL/sysroot/armhf
+rm -rf $INSTALL/sysroot/armhf/var/lib/snapd
 
 if [ "$CLEAN" == "1" ]; then
     if [ -d $INSTALL/sysroot/amd64 ]; then
@@ -229,29 +230,30 @@ build_wrappers x86_64
 #build_3rdparty_cmake SDL_mixer "-DSDL2MIXER_VENDORED=ON"
 
 # x86_64 support with OpenGL
-build_3rdparty_cmake gl4es "-DGLVND=OFF -DHYBRIS=ON -DNOX11=OFF -DNOEGL=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=aarch64-linux-gnu"
-build_3rdparty_cmake box64 "-DGENERIC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
+build_3rdparty_cmake box64 "-DGENERIC=ON -DNO_CONF_INSTALL=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo"
 build_3rdparty_cmake sdl12-compat "-DSDL12TESTS=OFF -DSDL12DEVEL=OFF"
+build_3rdparty_cmake gl4es "-DCMAKE_BUILD_TYPE=RelWithDebInfo -DGBM=OFF"
+mkdir -p $INSTALL/usr/lib/aarch64-linux-gnu/gl4es
+mv $INSTALL/usr/lib/gl4es/libGL.so.1 $INSTALL/usr/lib/aarch64-linux-gnu/gl4es
+rmdir $INSTALL/usr/lib/gl4es
 
 # glvnd-compatible naming
 # mv $INSTALL/usr/lib/aarch64-linux-gnu/gl4es/libGL.so.1 $INSTALL/usr/lib/aarch64-linux-gnu/gl4es/libGLX_gl4es.so.0  
 
 # Requirements for compilation
 cd $BUILD_DIR
-wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-6_1.6.9-2ubuntu1.6_armhf.deb
-wget http://ports.ubuntu.com/pool/main/libx/libx11/libx11-dev_1.6.9-2ubuntu1.6_armhf.deb
+apt download libx11-6:armhf
+apt download libx11-dev:armhf
 
 # Mostly runtime libs for better app support (GTK, Steam)
-wget http://ports.ubuntu.com/pool/universe/liba/libappindicator/libappindicator1_12.10.1+20.04.20200408.1-0ubuntu1_armhf.deb
-wget http://ports.ubuntu.com/pool/main/liba/libappindicator/libappindicator3-1_12.10.1+20.04.20200408.1-0ubuntu1_armhf.deb
-wget http://ports.ubuntu.com/pool/main/libd/libdbusmenu/libdbusmenu-glib4_16.04.1+18.10.20180917-0ubuntu6_armhf.deb
-wget http://ports.ubuntu.com/pool/main/libd/libdbusmenu/libdbusmenu-gtk3-4_16.04.1+18.10.20180917-0ubuntu6_armhf.deb
-wget http://ports.ubuntu.com/pool/universe/libd/libdbusmenu/libdbusmenu-gtk4_16.04.1+18.10.20180917-0ubuntu6_armhf.deb
-wget http://ports.ubuntu.com/pool/universe/libs/libsdl1.2/libsdl1.2debian_1.2.15+dfsg2-5_armhf.deb
-wget http://ports.ubuntu.com/pool/main/g/gtk+2.0/libgtk2.0-bin_2.24.32-4ubuntu4_armhf.deb
-wget http://ports.ubuntu.com/pool/main/g/gtk+2.0/gtk2-engines-pixbuf_2.24.32-4ubuntu4_armhf.deb
-wget http://ports.ubuntu.com/pool/main/g/gtk+2.0/libgtk2.0-0_2.24.32-4ubuntu4_armhf.deb
-wget http://ports.ubuntu.com/pool/main/g/gtk+2.0/libgtk2.0-common_2.24.32-4ubuntu4_all.deb
+apt download libappindicator3-1:armhf
+apt download libdbusmenu-glib4:armhf
+apt download libdbusmenu-gtk3-4:armhf
+apt download libsdl1.2-compat:armhf
+apt download libgtk2.0-bin:armhf
+apt download gtk2-engines-pixbuf:armhf
+apt download libgtk2.0-0t64:armhf
+apt download libgtk2.0-common
 
 for f in $(ls *.deb); do dpkg -x $f $BUILD_DIR/sysroot/tmp; done
 cp -a $BUILD_DIR/sysroot/tmp/* $INSTALL/sysroot/armhf
@@ -267,8 +269,11 @@ build_wrappers i386 "$CMAKE_ARMHF_ARGS"
 
 # Build included components
 # 32bit
-build_3rdparty_cmake_sysroot gl4es "-DGLVND=OFF -DHYBRIS=ON -DNOX11=OFF -DNOEGL=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMULTIARCH_PREFIX=arm-linux-gnueabihf $CMAKE_ARMHF_ARGS"
-build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot box86 "-DARM64=ON -DARM_DYNAREC=ON -DNO_CONF_INSTALL=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo $CMAKE_ARMHF_ARGS"
+build_3rdparty_cmake_sysroot gl4es "-DCMAKE_BUILD_TYPE=RelWithDebInfo -DGBM=OFF $CMAKE_ARMHF_ARGS"
+mkdir -p $INSTALL/usr/lib/arm-linux-gnueabihf/gl4es
+mv $INSTALL/usr/lib/gl4es/libGL.so.1 $INSTALL/usr/lib/arm-linux-gnueabihf/gl4es
+rmdir $INSTALL/usr/lib/gl4es
 
 # Use shipped linker with box86 directly as well
 patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/armhf/lib/ld-linux-armhf.so.3 $INSTALL/bin/box86
@@ -306,7 +311,7 @@ if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
 fi
 mkdir -p $INSTALL/wine
-wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/9.19/wine-9.19-staging-amd64.tar.xz
+wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/11.8/wine-11.8-staging-amd64.tar.xz
 tar xvf $BUILD_DIR/wine.tar.xz -C $INSTALL/wine --strip-components=1
 
 exit 0

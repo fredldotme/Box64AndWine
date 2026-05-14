@@ -2,6 +2,30 @@
     "builder": "custom",
     "default": "build",
     "kill": "binarysupport",
+    "image_setup": {
+        "run": [
+            "dpkg --add-architecture arm64",
+            "dpkg --add-architecture armhf",
+            "dpkg --add-architecture amd64",
+            "echo 'Types: deb' > /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'URIs: http://archive.ubuntu.com/ubuntu/' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Suites: noble noble-updates noble-backports noble-security' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Components: main universe restricted multiverse' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Architectures: amd64 i386' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo '' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Types: deb' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'URIs: http://ports.ubuntu.com/ubuntu-ports/' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Suites: noble noble-updates noble-backports noble-security' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Components: main universe restricted multiverse' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Architectures: arm64 armhf' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo 'Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "echo '' >> /etc/apt/sources.list.d/ubuntu.sources",
+            "cat /etc/apt/sources.list.d/ubuntu.sources",
+            "apt update",
+            "apt -y full-upgrade"
+        ]
+    },
     "dependencies_host": [
         "gcc-arm-linux-gnueabihf",
         "g++-arm-linux-gnueabihf",
@@ -21,7 +45,7 @@
         "libxmp-dev",
         "fuse",
         "wayland-protocols",
-        "libappindicator1",
+        "libappindicator3-1",
         "libsdl2-gfx-1.0-0",
         "libsdl2-net-2.0-0",
         "libsdl2-ttf-2.0-0",
@@ -32,16 +56,15 @@
     "install_lib": [
         "/lib/${ARCH_TRIPLET}/libfuse.so*",
         "/lib/${ARCH_TRIPLET}/libulockmgr.so*",
-        "/lib/${ARCH_TRIPLET}/libappindicator.so*",
+        "/lib/${ARCH_TRIPLET}/libappindicator*.so*",
         "/lib/${ARCH_TRIPLET}/libSDL2*.so*",
-        "/lib/libopusfile.so*",
-        "/lib/libopusurl.so*"
+        "/lib/${ARCH_TRIPLET}/libopus*.so*"
     ],
     "install_bin": [
         "/usr/bin/fusermount"
     ],
     "build": "${ROOT}/build.sh -c",
-    "make_jobs": 6,
-    "qt_version": "5.12",
-    "framework": "ubuntu-sdk-20.04"
+    "make_jobs": 4,
+    "qt_version": "5.15",
+    "framework": "ubuntu-touch-24.04-1.x"
 }

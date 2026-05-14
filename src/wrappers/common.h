@@ -19,6 +19,7 @@ inline void setupEnvironment()
 {
     setenv("BOX64_LOG", "0", 0);
     setenv("BOX64_NOBANNER", "1", 0);
+    setenv("BOX64_TRACE_FILE", "/dev/null", 0);
     prependEnvVar("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/amd64/lib/x86_64-linux-gnu");
     prependEnvVar("BOX64_LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/lib/x86_64-linux-gnu");
     setenv("BOX64_BASH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/sysroot/amd64/usr/bin/bash", 0);

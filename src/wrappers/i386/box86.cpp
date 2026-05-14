@@ -11,6 +11,7 @@ int main(int argc, char** argv) {
 
     if (getenv("GL4ES")) {
         prependEnvVar("LD_LIBRARY_PATH", "/opt/click.ubuntu.com/box64andwine.fredldotme/current/usr/lib/arm-linux-gnueabihf/gl4es");
+        setenv("LIBGL_FB", "3", 0);
     }
 
     setenv("HYBRIS_LD_LIBRARY_PATH", "/vendor/lib:/system/lib:/vendor/lib/egl", 0);
