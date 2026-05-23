@@ -311,7 +311,7 @@ if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
 fi
 mkdir -p $INSTALL/wine
-wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/11.8/wine-11.8-staging-amd64.tar.xz
+wget -O $BUILD_DIR/wine.tar.xz https://github.com/Kron4ek/Wine-Builds/releases/download/9.19/wine-9.19-staging-amd64.tar.xz
 tar xvf $BUILD_DIR/wine.tar.xz -C $INSTALL/wine --strip-components=1
 
 exit 0
