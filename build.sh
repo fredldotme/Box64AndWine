@@ -282,7 +282,7 @@ patchelf --set-interpreter /opt/click.ubuntu.com/box64andwine.fredldotme/current
 # mv $INSTALL/usr/lib/arm-linux-gnueabihf/gl4es/libGL.so.1 $INSTALL/usr/lib/arm-linux-gnueabihf/gl4es/libGLX_gl4es.so.0
 
 # Remove unnecessary cruft after compilation
-rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include}
+rm -rf $INSTALL/sysroot/armhf/usr/{bin,sbin,games,share,include,libexec}
 rm -rf $INSTALL/sysroot/armhf/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var,mnt}
 rm -rf $INSTALL/sysroot/armhf/{firmware,vendor,product,factory,system,persist,data,metadata,odm,cache,apex}
 rm -rf $INSTALL/sysroot/armhf/usr/lib/systemd
@@ -290,22 +290,13 @@ rm -rf $INSTALL/sysroot/armhf/usr/lib/python*
 rm -rf $INSTALL/sysroot/armhf/usr/lib/ssl
 rm -rf $INSTALL/sysroot/armhf/usr/lib/environment.d
 
-# Box64 running scripts for us only needs bins and libs
-rm -rf $INSTALL/sysroot/amd64/usr/{share,include}
+# Box64 next
+rm -rf $INSTALL/sysroot/amd64/usr/{bin,sbin,games,share,include,libexec}
 rm -rf $INSTALL/sysroot/amd64/{bin,sbin,home,tmp,proc,sys,dev,etc,debootstrap,root,run,var,mnt}
-ln -sf usr/bin $INSTALL/sysroot/amd64/bin
-ln -sf usr/sbin $INSTALL/sysroot/amd64/sbin
 rm -rf $INSTALL/sysroot/amd64/usr/lib/systemd
 rm -rf $INSTALL/sysroot/amd64/usr/lib/python*
 rm -rf $INSTALL/sysroot/amd64/usr/lib/ssl
 rm -rf $INSTALL/sysroot/amd64/usr/lib/environment.d
-
-# Clean up amd64 sysroot bins from symlinks
-for f in $(ls $INSTALL/sysroot/amd64/usr/{bin,sbin}/*); do
-    if [ -L $f ]; then
-        rm $f
-    fi
-done
 
 if [ -d $INSTALL/wine ]; then
     rm -rf $INSTALL/wine
